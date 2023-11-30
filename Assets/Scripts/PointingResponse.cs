@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class PointingResponse : MonoBehaviour
 {
     private OVRInput.Controller trackedObj; 
@@ -14,7 +15,7 @@ public class PointingResponse : MonoBehaviour
     public LayerMask triangleCompletionMask;
     
     private Transform answerReticleTransform;
-    public const OVRInput.Button AnswerButton = OVRInput.Button.One;
+
     // Reticle actually being used and its transform
     private GameObject reticle;
     private Transform reticleTransform;
@@ -30,7 +31,7 @@ public class PointingResponse : MonoBehaviour
     private bool shouldAnswer; // True if there's a valid answer target
     void Awake()
     {
-        trackedObj = this.GetComponent<OVRControllerHelper>().m_controller;
+        trackedObj = OVRInput.Controller.RTouch; // check m_controller in OVRControllerHelper and see which one to call
     }
 
     void Start()
@@ -64,9 +65,7 @@ public class PointingResponse : MonoBehaviour
 
     void Update()
     {
-        OVRInput.Update();      
 
-        // Debug.Log(OVRInput.GetDown(AnswerButton, trackedObj)); // is this for selection?
         bool answerInitiated = (GetCurrentMarker() == null);
 
         if (answerInitiated)
@@ -94,16 +93,33 @@ public class PointingResponse : MonoBehaviour
             }
         }
 
-        if (OVRInput.GetUp(AnswerButton, trackedObj) && shouldAnswer)
+        // Debug.Log(OVRInput.Get(OVRInput.Button.One, OVRInput.Controller.RTouch));
+
+        if (OVRInput.GetUp(OVRInput.Button.One, OVRInput.Controller.RTouch) && shouldAnswer)
         {
             // Writes the response to a file
-            // System.IO.File.AppendAllText(GameSettings.response_file, "Response: " +
-            //                                                          answerReticleTransform.position.ToString() +
-            //                                                          " Time: " + Time.time + "\r\n");
+            System.IO.File.AppendAllText(GameSettings.response_file, "Response: " +
+                                                                     answerReticleTransform.position.ToString("F6") +
+                                                                     " Time: " + Time.time + "\r\n");
+
+            float completeTimeStamp = Time.time;
+            Debug.LogWarning("Trial: " + GameSettings.current_trial.ToString() + "," +
+                             "RT: " + (completeTimeStamp - currentTime).ToString("F3") + "," +
+                             "Selected position: " + answerReticle.transform.position.ToString("F3"));
+
+            // increase trial count and start a new task
+            // GetCurrentMarker, instatiate a new trial/marker 
+
+            GameSettings.current_trial += 1;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+
             answerReticle.SetActive(false);
             laser.SetActive(false);
             
-            Debug.Log("State:" + "next trial?");
+
+
+
 
             // Display a configuration-specific popup message for the experimenter
             // TODO: Could have environment-specific objects to generate messages

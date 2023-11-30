@@ -47,7 +47,7 @@ public class StartMarkerSpawn : MonoBehaviour {
         this.transform.position = new Vector3(xCoord * GameSettings.scale, 0, zCoord * GameSettings.scale);
 
         // Write the marker position and time the appropriate files
-        // System.IO.File.AppendAllText(GameSettings.marker_file, "Starting Marker:" + this.transform.position + "\r\n");
-        // System.IO.File.AppendAllText(GameSettings.time_file, "Start time:" + Time.time + "\r\n");
+        System.IO.File.AppendAllText(GameSettings.marker_file, "Starting Marker:" + this.transform.position + "\r\n");
+        System.IO.File.AppendAllText(GameSettings.time_file, "Start time:" + Time.time + "\r\n");
     }
 }

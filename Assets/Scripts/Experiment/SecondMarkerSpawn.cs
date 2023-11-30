@@ -67,8 +67,8 @@ public class SecondMarkerSpawn : MonoBehaviour
         this.transform.Translate(Vector3.back * (1.524f + length) * GameSettings.scale, Space.Self); //4ft + random amt 
 
         //writing to text file
-        // System.IO.File.AppendAllText(GameSettings.marker_file, "First Marker:" + FirstMarker.transform.position + "\r\n");
-        // System.IO.File.AppendAllText(GameSettings.marker_file, "Second Marker:" + this.transform.position + "\r\n");
+        System.IO.File.AppendAllText(GameSettings.marker_file, "First Marker:" + FirstMarker.transform.position + "\r\n");
+        System.IO.File.AppendAllText(GameSettings.marker_file, "Second Marker:" + this.transform.position + "\r\n");
     }
    
 }

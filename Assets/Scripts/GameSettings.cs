@@ -23,30 +23,19 @@ public class GameSettings : MonoBehaviour {
     // Data collection file paths
     public static DirectoryInfo data_dir;
     // TODO: the path should be adaptable with Quest 3.
-    public static string marker_file = "~/Users/wjdomain/Documents/test/marker.txt";
-    public static string place_file = "~/Users/wjdomain/Documents/test/place.txt";
-    public static string response_file = "~/Users/wjdomain/Documents/test/response.txt";
-    public static string time_file = "~/Users/wjdomain/Documents/test/time.txt";
-    public static string track_file = "~/Users/wjdomain/Documents/test/track.txt";
-
     // windows
-    // public static string marker_file = "C://Users/wen-jie.tseng/OneDrive/Desktop/test/marker.txt";
-    // public static string place_file = "C://Users/wen-jie.tseng/OneDrive/Desktop/test/place.txt";
-    // public static string response_file = "C://Users/wen-jie.tseng/OneDrive/Desktop/test/response.txt";
-    // public static string time_file = "C://Users/wen-jie.tseng/OneDrive/Desktop/test/time.txt";
-    // public static string track_file = "C://Users/wen-jie.tseng/OneDrive/Desktop/test/track.txt";
-    /*public static string marker_file = "C://Users/psych_admin/Desktop/test/marker.txt";
-    public static string place_file = "C://Users/psych_admin/Desktop/test/place.txt";
-    public static string response_file = "C://Users/psych_admin/Desktop/test/response.txt";
-    public static string time_file = "C://Users/psych_admin/Desktop/test/time.txt";
-    public static string track_file = "C://Users/psych_admin/Desktop/test/track.txt";*/
+    public static string marker_file = "C://Users/wen-jie.tseng/OneDrive/Desktop/test/marker.txt";
+    public static string place_file = "C://Users/wen-jie.tseng/OneDrive/Desktop/test/place.txt";
+    public static string response_file = "C://Users/wen-jie.tseng/OneDrive/Desktop/test/response.txt";
+    public static string time_file = "C://Users/wen-jie.tseng/OneDrive/Desktop/test/time.txt";
+    public static string track_file = "C://Users/wen-jie.tseng/OneDrive/Desktop/test/track.txt";
 
 
     // Scene configuration variables. Having these separate from the Menu defaults allows
     // me to set a default environment and configuration for debugging
     public static string env = "Field";
     public static bool landmarks = true;
-    public static bool fence_presence = true;
+    public static bool fence_presence = false;
     public static string fence_shape = "square";
     public static int scale = 1;
     public static string navMode = "Discordant";
