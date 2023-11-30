@@ -21,6 +21,7 @@ public class Restart : MonoBehaviour {
 
     //current degree value
     public static float degree;
+    public static GameObject targetLandmark;
 
     void Start() {
 
@@ -32,16 +33,27 @@ public class Restart : MonoBehaviour {
         prevPosition = startPosition;
 
         //takes a new degree for the current degree value and takes it out of the stack, once you run out play a sound 
-        print(System.String.Join(", ", GameSettings.degreeList.ToArray().Select(p => p.ToString()).ToArray()));
+        print(System.String.Join(", ", GameSettings.degreeListSMM.ToArray().Select(p => p.ToString()).ToArray()));
         try {
             //for every restart, pop a value from the degree list
-            int index = Random.Range(0, GameSettings.degreeList.Count - 1);
-            degree = GameSettings.degreeList[index];
-            GameSettings.degreeList.RemoveAt(index);
+            int index = Random.Range(0, GameSettings.degreeListSMM.Count - 1);
+            degree = GameSettings.degreeListSMM[index];
+            GameSettings.degreeListSMM.RemoveAt(index);
         }
         catch (System.Exception) {
             // once all the angles have been removed, play a sound
-            print("All trials complete");
+            Debug.LogWarning("All trials complete");
+        }
+        try
+        {
+            int index2 = Random.Range(0, GameSettings.landmarkNameList.Count - 1);
+            for (int i = 0; i < GameSettings.landmarkNameList.Count; i ++) Debug.LogWarning(GameSettings.landmarkNameList[i]);
+            targetLandmark = GameObject.Find(GameSettings.landmarkNameList[index2]);
+            GameSettings.landmarkNameList.RemoveAt(index2);
+        }
+        catch (System.Exception)
+        {
+            Debug.LogWarning("All landmarks complete");
         }
     }
 

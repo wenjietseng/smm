@@ -27,11 +27,18 @@ public class PointingResponse : MonoBehaviour
     private bool rotated_on = false;
     // Needed for time
     float currentTime;
-
+    float completeTimeStamp;
+    private GameSettings gameSettings;
+    private LandmarkPointingHandler landmarkPointingHandler;
     private bool shouldAnswer; // True if there's a valid answer target
+    private bool isPointingLandmark;
+
+
     void Awake()
     {
         trackedObj = OVRInput.Controller.RTouch; // check m_controller in OVRControllerHelper and see which one to call
+        gameSettings = GameObject.Find("GameController").GetComponent<GameSettings>();
+        landmarkPointingHandler = GameObject.Find("GameController").GetComponent<LandmarkPointingHandler>();
     }
 
     void Start()
@@ -97,39 +104,57 @@ public class PointingResponse : MonoBehaviour
 
         if (OVRInput.GetUp(OVRInput.Button.One, OVRInput.Controller.RTouch) && shouldAnswer)
         {
-            // Writes the response to a file
-            System.IO.File.AppendAllText(GameSettings.response_file, "Response: " +
-                                                                     answerReticleTransform.position.ToString("F6") +
-                                                                     " Time: " + Time.time + "\r\n");
+            if (!isPointingLandmark) // triangle completion task
+            {
+                // Writes the response to a file
+                System.IO.File.AppendAllText(GameSettings.response_file, "Response: " +
+                                                                        answerReticleTransform.position.ToString("F6") +
+                                                                        " Time: " + Time.time + "\r\n");
 
-            float completeTimeStamp = Time.time;
-            Debug.LogWarning("Trial: " + GameSettings.current_trial.ToString() + "," +
-                             "RT: " + (completeTimeStamp - currentTime).ToString("F3") + "," +
-                             "Selected position: " + answerReticle.transform.position.ToString("F3"));
+                completeTimeStamp = Time.time;
+                Debug.LogWarning("Triangle completion trial: " + GameSettings.current_trial.ToString() + "," +
+                                "RT: " + (completeTimeStamp - currentTime).ToString("F3") + "," +
+                                "Selected position: " + answerReticle.transform.position.ToString("F3"));
 
-            // increase trial count and start a new task
-            // GetCurrentMarker, instatiate a new trial/marker 
+                // continue to landmark recall
+                isPointingLandmark = true;
+                // show instruction like: point towards one landmark, display its name on an UI
+                Debug.LogWarning("Please select the position of " + Restart.targetLandmark + " by pressing A button.");
 
-            GameSettings.current_trial += 1;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-
-
-            answerReticle.SetActive(false);
-            laser.SetActive(false);
+                // disable all the landmarks
+                gameSettings.virtualLandmarks.SetActive(false);
+                currentTime = Time.time; // new timestamp for landmark task           
+                // Display a configuration-specific popup message for the experimenter
+                // TODO: Could have environment-specific objects to generate messages
+                // if (GameSettings.env == "Training")
+                    // Debug.Log(GameSettings.navMode.ToString() + " interface training complete. Press Space to re-run, or Escape to return to menu.",
+                    //           GameSettings.navMode.ToString() + " Training Complete");
+                // else
+                    // Debug.Log(GameSettings.navMode.ToString() + " interface trial " + GameSettings.current_trial.ToString() + "/" + 
+                    //           GameSettings.trial_count.ToString() + " complete. Press Space to continue, Backspace to redo, or Escape to return to menu.",
+                    //           GameSettings.navMode.ToString() + " " + GameSettings.current_trial.ToString() + "/" + GameSettings.trial_count.ToString() + " Complete");    
+            }
+            else // landmark recalling: use the same reticle to point to the position of a landmark
+            {
+                completeTimeStamp = Time.time;
+                Debug.LogWarning("Landmark recall trial: " + GameSettings.current_trial.ToString() + "," +
+                                "RT: " + (completeTimeStamp - currentTime).ToString("F3") + "," +
+                                "Selected position: " + answerReticle.transform.position.ToString("F3")); 
+                
+                
             
-
-
-
-
-            // Display a configuration-specific popup message for the experimenter
-            // TODO: Could have environment-specific objects to generate messages
-            // if (GameSettings.env == "Training")
-                // Debug.Log(GameSettings.navMode.ToString() + " interface training complete. Press Space to re-run, or Escape to return to menu.",
-                //           GameSettings.navMode.ToString() + " Training Complete");
-            // else
-                // Debug.Log(GameSettings.navMode.ToString() + " interface trial " + GameSettings.current_trial.ToString() + "/" + 
-                //           GameSettings.trial_count.ToString() + " complete. Press Space to continue, Backspace to redo, or Escape to return to menu.",
-                //           GameSettings.navMode.ToString() + " " + GameSettings.current_trial.ToString() + "/" + GameSettings.trial_count.ToString() + " Complete");
+                // TODO: 
+                // - add hmd position and controller position 
+                // - show error calculation and time in VR
+                // - choose lab to try RW landmarks
+                
+                
+                isPointingLandmark = false;
+                GameSettings.current_trial += 1;
+                answerReticle.SetActive(false);
+                laser.SetActive(false);
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
         }
     }
 

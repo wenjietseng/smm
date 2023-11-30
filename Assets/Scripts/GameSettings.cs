@@ -42,8 +42,10 @@ public class GameSettings : MonoBehaviour {
 
     public static List<float> degreeList = new List<float> { 135, 112.5f, 90, 67.5f, 45, 22.5f, -22.5f, -45, -67.5f, -90, -112.5f, -135 };
     public static List<float> degreeListSMM = new List<float> { -135, -101.25f, -67.5f, -33.75f, 33.75f, 67.5f, 101.25f, -135 };
+    public GameObject virtualLandmarks;
+    public static List<string> landmarkNameList = new List<string> {"Bench", "Box", "StreetLamp", "WasteBin"}; // 4 virtual and 4 real-world landmakrs
 
-
+    
     // State variables
     public static int current_trial = 1;
 
