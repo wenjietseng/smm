@@ -10,6 +10,11 @@ public class JoystickLocomotion : MonoBehaviour
     public Transform head;
     public float speed = 2f;
 
+    void Start()
+    {
+        
+    }
+
     void Update()
     {
         // Use the camera forward and right direction.
